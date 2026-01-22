@@ -7,7 +7,7 @@ El proyecto está pensado como práctica backend y para portafolio, aplicando bu
 
 ------------------------------------------------------------------------------------------------------------------------------------------
 
-🧱 Arquitectura del Proyecto
+ Arquitectura del Proyecto
 
 El proyecto sigue una arquitectura en capas:
 
@@ -58,19 +58,19 @@ El sistema maneja los siguientes roles:
 
 Representa a los clientes del sistema.
 
-🏪 Restaurante
+ Restaurante
 
 Contiene información básica y una lista de productos asociados.
 
-🍔 Producto
+ Producto
 
 Pertenece a un restaurante y tiene estado de disponibilidad.
 
-🛵 Repartidor
+ Repartidor
 
 Usuario encargado de entregar los pedidos.
 
-📦 Pedido
+ Pedido
 
 Entidad principal que relaciona:
 
@@ -103,7 +103,7 @@ EstadoRestaurante
 ABIERTO,
 CERRADO
 
-🌐 Endpoints Principales (URLs)
+ Endpoints Principales (URLs)
 📌 Usuarios
 POST   /api/usuarios
 GET    /api/usuarios
@@ -235,7 +235,8 @@ spring.jpa.show-sql=true
 - Documentación con Swagger
 
 
-📌 Proyecto desarrollado con fines educativos y de portafolio.
+ Proyecto desarrollado con fines educativos y de portafolio.
+ Autor Adalberto
 
 
 
