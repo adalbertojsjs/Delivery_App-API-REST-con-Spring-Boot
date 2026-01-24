@@ -1,5 +1,6 @@
 package com.proyectos.DeliveryApp.Service;
 
+import com.proyectos.DeliveryApp.Exception.UsuarioNoEncontradoException;
 import com.proyectos.DeliveryApp.Model.Rol;
 import com.proyectos.DeliveryApp.Model.Usuario;
 import com.proyectos.DeliveryApp.Repository.UsuarioRepository;
@@ -49,7 +50,7 @@ public class UsuarioServiceImpl implements UsuarioService{
 
         //Busca el id
         Usuario usuario = usuarioRepository.findById(id).
-                orElseThrow(() -> new EntityNotFoundException("El ID no fue encontrado"));
+                orElseThrow(() -> new UsuarioNoEncontradoException(id));
 
         if (usuario.getRol() == rolActualizado) {
             throw new IllegalStateException("El usuario ya tiene ese rol");
@@ -78,7 +79,7 @@ public class UsuarioServiceImpl implements UsuarioService{
         }
         //Busca el ID y lo retorna en caso de que lo encuentre
          return usuarioRepository.
-                findById(id).orElseThrow(() -> new EntityNotFoundException("El USUARIO no se encontro"));
+                findById(id).orElseThrow(() -> new UsuarioNoEncontradoException(id));
 
 
     }

@@ -1,8 +1,10 @@
 package com.proyectos.DeliveryApp.Controller;
 
+import com.proyectos.DeliveryApp.DTO.PedidoDTO;
 import com.proyectos.DeliveryApp.Model.EstadoPedido;
 import com.proyectos.DeliveryApp.Model.Pedido;
 import com.proyectos.DeliveryApp.Service.PedidoService;
+import com.proyectos.DeliveryApp.mapper.PedidoMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,8 +23,8 @@ public class ControllerPedido {
 
 
     @GetMapping
-    public ResponseEntity<List<Pedido>> listar(){
-        return ResponseEntity.ok().body(service.listar());//200.ok
+    public ResponseEntity<List<PedidoDTO>> listar(){
+        return ResponseEntity.ok( service.listar().stream().map(PedidoMapper::toDTO).toList());//200.ok
     }
 
     @PostMapping
@@ -65,6 +67,14 @@ public class ControllerPedido {
     public ResponseEntity<List<Pedido>> listarPor_Estado(@RequestParam EstadoPedido estado){
         return ResponseEntity.ok(service.obtenerPorEstado(estado));
     }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Pedido> buscarPorId(@PathVariable Long id) {
+        Pedido pedido = service.buscarPorId(id);
+        PedidoDTO pedidoDTO = PedidoMapper.toDTO(pedido);
+        return ResponseEntity.ok(pedido);//200.ok
+    }
+
 
     //URL para llamar los metodos
     //GET /v1/pedidos

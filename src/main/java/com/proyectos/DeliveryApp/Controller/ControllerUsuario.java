@@ -1,9 +1,11 @@
 package com.proyectos.DeliveryApp.Controller;
 
 
+import com.proyectos.DeliveryApp.DTO.UsuarioDTO;
 import com.proyectos.DeliveryApp.Model.Rol;
 import com.proyectos.DeliveryApp.Model.Usuario;
 import com.proyectos.DeliveryApp.Service.UsuarioService;
+import com.proyectos.DeliveryApp.mapper.UsuarioMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,8 +23,8 @@ public class ControllerUsuario {
     }
 
     @GetMapping
-    public ResponseEntity<List<Usuario>> listar(){
-        return  ResponseEntity.ok(service.listar());
+    public ResponseEntity<List<UsuarioDTO>> listar(){
+        return  ResponseEntity.ok(service.listar().stream().map(UsuarioMapper::toDTO).toList());
     }
 
     @PostMapping
@@ -43,8 +45,10 @@ public class ControllerUsuario {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Usuario> buscarId(@PathVariable Long id){
-        return ResponseEntity.ok(service.buscarPorId(id));
+    public ResponseEntity<UsuarioDTO> buscarId(@PathVariable Long id){
+        Usuario usuario = service.buscarPorId(id);
+        UsuarioDTO usuarioDTO = UsuarioMapper.toDTO(usuario);
+        return ResponseEntity.ok(usuarioDTO);
 
     }
 

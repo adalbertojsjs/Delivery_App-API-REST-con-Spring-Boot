@@ -1,5 +1,6 @@
 package com.proyectos.DeliveryApp.Service;
 
+import com.proyectos.DeliveryApp.Exception.RestauranteNoEncontradoException;
 import com.proyectos.DeliveryApp.Model.Restaurante;
 import com.proyectos.DeliveryApp.Repository.RestauranteRepository;
 import org.springframework.stereotype.Service;
@@ -28,7 +29,7 @@ public class RestauranteServiceImpl implements ServiceRestaurante {
     @Override
     public Restaurante actualizar(Long id, Restaurante restaurante) {
         Restaurante restauranteExistente = repository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Restaurante no encontrado"));
+                .orElseThrow(() -> new RestauranteNoEncontradoException(id));
 
         restauranteExistente.setNombre(restaurante.getNombre());
         restauranteExistente.setDireccion(restaurante.getDireccion());
@@ -39,7 +40,7 @@ public class RestauranteServiceImpl implements ServiceRestaurante {
     @Override
     public void eliminar(Long id) {
         Restaurante restauranteExistente = repository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Restaurante no encontrado"));
+                .orElseThrow(() -> new RestauranteNoEncontradoException(id));
         repository.delete(restauranteExistente);
     }
 }

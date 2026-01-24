@@ -1,5 +1,8 @@
 package com.proyectos.DeliveryApp.Service;
 
+import com.proyectos.DeliveryApp.Exception.PedidoNoEncontradoException;
+import com.proyectos.DeliveryApp.Exception.ProductoNoEncontrado;
+import com.proyectos.DeliveryApp.Exception.RestauranteNoEncontradoException;
 import com.proyectos.DeliveryApp.Model.Disponible;
 import com.proyectos.DeliveryApp.Model.Producto;
 import com.proyectos.DeliveryApp.Repository.ProductoRepository;
@@ -60,7 +63,7 @@ public class ProductoServiceImpl implements ProductoService{
         }
 
         Producto producto =  productoRepository.findById(id).
-                orElseThrow(() -> new EntityNotFoundException("Producto no encontrado"));
+                orElseThrow(() -> new ProductoNoEncontrado(id));
 
         producto.setDisponible(disponible);
        return productoRepository.save(producto);
@@ -75,7 +78,7 @@ public class ProductoServiceImpl implements ProductoService{
         }
 
         if (!restauranteRepository.existsById(restauranteId)){
-            throw new EntityNotFoundException("El ID no existe");
+            throw new RestauranteNoEncontradoException(restauranteId);
         }
 
        return productoRepository.findByRestauranteId(restauranteId);
@@ -89,7 +92,7 @@ public class ProductoServiceImpl implements ProductoService{
         }
 
        return productoRepository.findById(id).orElseThrow
-                (() -> new EntityNotFoundException("Producto no encontrado"));
+                (() -> new ProductoNoEncontrado(id));
 
 
     }

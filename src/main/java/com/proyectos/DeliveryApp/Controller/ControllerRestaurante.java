@@ -1,7 +1,9 @@
 package com.proyectos.DeliveryApp.Controller;
 
+import com.proyectos.DeliveryApp.DTO.RestauranteDTO;
 import com.proyectos.DeliveryApp.Model.Restaurante;
 import com.proyectos.DeliveryApp.Service.ServiceRestaurante;
+import com.proyectos.DeliveryApp.mapper.RestauranteMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,8 +23,8 @@ import java.util.List;
 
         // LISTAR
         @GetMapping
-        public ResponseEntity<List<Restaurante>> listar(){
-            return ResponseEntity.ok(service.listar());
+        public ResponseEntity<List<RestauranteDTO>> listar(){
+            return ResponseEntity.ok(service.listar().stream().map(RestauranteMapper::toDTO).toList());
         }
 
         // CREAR

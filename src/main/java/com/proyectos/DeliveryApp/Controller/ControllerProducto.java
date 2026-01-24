@@ -1,9 +1,11 @@
 package com.proyectos.DeliveryApp.Controller;
 
 
+import com.proyectos.DeliveryApp.DTO.ProductoDTO;
 import com.proyectos.DeliveryApp.Model.Disponible;
 import com.proyectos.DeliveryApp.Model.Producto;
 import com.proyectos.DeliveryApp.Service.ProductoService;
+import com.proyectos.DeliveryApp.mapper.ProductoMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,8 +24,8 @@ public class ControllerProducto {
 
 
     @GetMapping
-    public ResponseEntity<List<Producto>> listar(){
-        return ResponseEntity.ok(service.listar());//200.ok
+    public ResponseEntity<List<ProductoDTO>> listar(){
+        return ResponseEntity.ok(service.listar().stream().map(ProductoMapper::toDTO).toList());//200.ok
     }
 
     @PostMapping
@@ -38,8 +40,10 @@ public class ControllerProducto {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Producto> buscarId(@PathVariable Long id){
-      return ResponseEntity.ok(service.buscarPorId(id));
+    public ResponseEntity<ProductoDTO> buscarId(@PathVariable Long id){
+       Producto producto = service.buscarPorId(id);
+        ProductoDTO productoDTO = ProductoMapper.toDTO(producto);
+      return ResponseEntity.ok(productoDTO);
     }
 
     @GetMapping(params = "restauranteId")

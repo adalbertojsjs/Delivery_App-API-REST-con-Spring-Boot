@@ -1,5 +1,8 @@
 package com.proyectos.DeliveryApp.Service;
 
+import com.proyectos.DeliveryApp.Exception.PedidoNoEncontradoException;
+import com.proyectos.DeliveryApp.Exception.RestauranteNoEncontradoException;
+import com.proyectos.DeliveryApp.Exception.UsuarioNoEncontradoException;
 import com.proyectos.DeliveryApp.Model.EstadoPedido;
 import com.proyectos.DeliveryApp.Model.Pedido;
 import com.proyectos.DeliveryApp.Model.Rol;
@@ -7,7 +10,6 @@ import com.proyectos.DeliveryApp.Model.Usuario;
 import com.proyectos.DeliveryApp.Repository.PedidoRepository;
 import com.proyectos.DeliveryApp.Repository.RestauranteRepository;
 import com.proyectos.DeliveryApp.Repository.UsuarioRepository;
-import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -45,7 +47,7 @@ public class PedidoServiceImpl implements PedidoService{
         Long clienteId = pedido.getCliente().getId();
 
         Usuario cliente = usuarioRepository.findById(clienteId)
-                .orElseThrow(() -> new RuntimeException("Cliente no encontrado"));
+                .orElseThrow(() -> new UsuarioNoEncontradoException(clienteId));
 
         // 🔗 Asignar cliente persistido
         pedido.setCliente(cliente);
@@ -65,7 +67,7 @@ public class PedidoServiceImpl implements PedidoService{
         }
 
         Pedido pedido1 = repository.findById(id).
-                orElseThrow(() -> new IllegalStateException("El ID no fue encontrado"));
+                orElseThrow(() -> new PedidoNoEncontradoException(id));
 
         pedido1.setEstadoPedido(EstadoPedido.CANCELADO);
         return repository.save(pedido1);
@@ -77,7 +79,7 @@ public class PedidoServiceImpl implements PedidoService{
             throw  new IllegalStateException("El ID es obligatorio");
         }
         Pedido pedido = repository.findById(id).
-                orElseThrow(() -> new IllegalStateException("El ID no fue encontrado"));
+                orElseThrow(() -> new PedidoNoEncontradoException(id));
 
         //Evitar que cambien un pedido finalizado
         if(pedido.getEstadoPedido() == EstadoPedido.ENTREGADO ||
@@ -100,7 +102,7 @@ public class PedidoServiceImpl implements PedidoService{
 
         // Buscar pedido
         Pedido pedido = repository.findById(pedidoId)
-                .orElseThrow(() -> new EntityNotFoundException("El pedido no fue encontrado"));
+                .orElseThrow(() -> new PedidoNoEncontradoException(pedidoId));
 
         // Validar estado del pedido
         if (pedido.getEstadoPedido() == EstadoPedido.CANCELADO ||
@@ -115,7 +117,7 @@ public class PedidoServiceImpl implements PedidoService{
 
         // Buscar repartidor
         Usuario repartidor = usuarioRepository.findById(repartidorId)
-                .orElseThrow(() -> new EntityNotFoundException("El repartidor no fue encontrado"));
+                .orElseThrow(() -> new UsuarioNoEncontradoException(repartidorId));
 
         // Validar rol (que el usuario sea repartidor)
         if (repartidor.getRol() != Rol.REPARTIDOR) {
@@ -137,7 +139,7 @@ public class PedidoServiceImpl implements PedidoService{
 
         //Verifica que exista un cliente con es ID
         if (!usuarioRepository.existsById(clienteId)){
-            throw new  EntityNotFoundException("El cliente no existe");
+            throw new UsuarioNoEncontradoException(clienteId);
         }
 
         return repository.findByClienteId(clienteId);
@@ -152,7 +154,7 @@ public class PedidoServiceImpl implements PedidoService{
 
         //Verifica que exista un restaurante con es ID
         if (!restauranteRepository.existsById(restauranteId)){
-            throw new EntityNotFoundException("El restaurante no existe");
+            throw new RestauranteNoEncontradoException(restauranteId);
         }
 
         return repository.findByRestauranteId(restauranteId);
@@ -166,6 +168,12 @@ public class PedidoServiceImpl implements PedidoService{
         }
 
         return repository.findByEstadoPedido(estado);
+    }
+
+    @Override
+    public Pedido buscarPorId(Long id) {
+        return repository.findById(id)
+                .orElseThrow(() -> new PedidoNoEncontradoException(id));
     }
 
 }

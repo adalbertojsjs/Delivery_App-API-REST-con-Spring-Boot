@@ -23,5 +23,7 @@ public interface PedidoService {
 
     List<Pedido> obtenerPorEstado(EstadoPedido estado);
 
+    Pedido buscarPorId(Long id);
+
 
 }
